@@ -28,7 +28,12 @@ local function makeDraggable(frame)
 
 	local function update(input)
 		local delta = input.Position - dragStart
-		frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		frame.Position = UDim2.new(
+			math.clamp(startPos.X.Scale, 0, 1),
+			math.clamp(startPos.X.Offset + delta.X, 0, workspace.CurrentCamera.ViewportSize.X - frame.AbsoluteSize.X),
+			math.clamp(startPos.Y.Scale, 0, 1),
+			math.clamp(startPos.Y.Offset + delta.Y, 0, workspace.CurrentCamera.ViewportSize.Y - frame.AbsoluteSize.Y)
+		)
 	end
 
 	frame.InputBegan:Connect(function(input)
@@ -58,7 +63,7 @@ frame.Size = UDim2.new(0, 300, 0, 200)
 frame.Position = UDim2.new(0.3, 0, 0.3, 0)
 frame.BackgroundColor3 = Color3.new(0, 0, 0)
 frame.Active = true
-frame.Draggable = false -- use custom drag
+frame.Draggable = false -- custom drag used
 makeDraggable(frame)
 addRainbowStroke(frame)
 
@@ -97,6 +102,7 @@ btn.TextColor3 = Color3.new(1, 1, 1)
 local btnCorner = Instance.new("UICorner", btn)
 btnCorner.CornerRadius = UDim.new(0, 8)
 
+-- Button border
 local btnStroke = Instance.new("UIStroke", btn)
 btnStroke.Color = Color3.new(1, 1, 1)
 btnStroke.Thickness = 2
@@ -111,7 +117,7 @@ status.TextSize = 18
 status.Font = Enum.Font.SourceSansBold
 status.TextColor3 = Color3.new(0, 1, 0)
 
--- Mini Icon
+-- Mini Icon (K circle)
 local mini = Instance.new("TextButton", gui)
 mini.Size = UDim2.new(0, 50, 0, 50)
 mini.Position = UDim2.new(0, 20, 0.8, 0)
@@ -121,9 +127,14 @@ mini.Font = Enum.Font.SourceSansBold
 mini.TextSize = 24
 mini.TextColor3 = Color3.new(1, 1, 1)
 mini.Visible = false
+mini.AutoButtonColor = true
+
 local miniCorner = Instance.new("UICorner", mini)
 miniCorner.CornerRadius = UDim.new(1, 0)
 addRainbowStroke(mini)
+
+-- Make mini draggable (PC & Mobile)
+makeDraggable(mini)
 
 -- Hide / Show logic
 hideBtn.MouseButton1Click:Connect(function()
@@ -136,9 +147,14 @@ mini.MouseButton1Click:Connect(function()
 	mini.Visible = false
 end)
 
--- Speed toggle
+-- Speed toggle and button animation
 local toggled = false
 btn.MouseButton1Click:Connect(function()
+	-- Animation (button press effect)
+	btn:TweenSize(UDim2.new(0.55, 0, 0, 36), "Out", "Quad", 0.08, true, function()
+		btn:TweenSize(UDim2.new(0.6, 0, 0, 40), "Out", "Back", 0.15, true)
+	end)
+
 	toggled = not toggled
 	if toggled then
 		hum.WalkSpeed = 120
