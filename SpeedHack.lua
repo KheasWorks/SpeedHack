@@ -102,10 +102,12 @@ btn.TextColor3 = Color3.new(1, 1, 1)
 local btnCorner = Instance.new("UICorner", btn)
 btnCorner.CornerRadius = UDim.new(0, 8)
 
--- Button border
+-- Button border (UIStroke) kept on button itself
 local btnStroke = Instance.new("UIStroke", btn)
 btnStroke.Color = Color3.new(1, 1, 1)
 btnStroke.Thickness = 2
+
+-- NO UITextStroke on text here (so no text border)
 
 -- Status Label
 local status = Instance.new("TextLabel", frame)
