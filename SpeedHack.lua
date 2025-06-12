@@ -72,7 +72,7 @@ corner.CornerRadius = UDim.new(0, 12)
 
 -- Title
 local title = Instance.new("TextLabel", frame)
-title.Text = "KheasHub"
+title.Text = "Chokik yawa"
 title.Font = Enum.Font.SourceSansBold
 title.TextSize = 22
 title.TextColor3 = Color3.new(1, 1, 1)
